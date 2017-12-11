@@ -56,7 +56,10 @@
                 <h6 class="content-group">NEW USER SIGNUP</h6>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary btn-block" onclick = "javascript: $('#login-area').hide(); $('#register-area').show();">Signup with Email <i class="icon-circle-right2 position-right"></i></button>
+                <a href = "/signup" class="btn btn-primary btn-block">Signup with Email
+                    <i class="icon-circle-right2 position-right"></i>
+                </a>
+                {{--<button type="button" class="btn btn-primary btn-block" onclick = "javascript: $('#login-area').hide(); $('#register-area').show();">Signup with Email <i class="icon-circle-right2 position-right"></i></button>--}}
             </div>
         </div>
         <!-- /simple login form -->

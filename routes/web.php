@@ -26,6 +26,7 @@ Route::get('/logout', 'UserController@logout');
 Route::get('/verify/{token}','UserController@verify');
 
 Route::get('/register', 'UserController@register');
+Route::get('/signup', 'UserController@signup');
 Route::post('/register', 'UserController@sendtoken');
 Route::post('/doregister', 'UserController@doRegister');
 

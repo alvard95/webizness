@@ -28,22 +28,36 @@
                 </div>
 
                 <div class="form-group has-feedback has-feedback-left">
-                    <input type="hidden" class="form-control" placeholder="Email address" name="email" value = {{$email}}>
-                </div>
-
-                <div class="form-group has-feedback has-feedback-left">
-                    <input type="text" class="form-control" placeholder="Enter Email Token" name="email_token" required>
+                    <input type="text" class="form-control" placeholder="First name" name="first_name" value = "">
                     <div class="form-control-feedback">
                         <i class="icon-user text-muted"></i>
                     </div>
                 </div>
 
                 <div class="form-group has-feedback has-feedback-left">
-                    <input type="text" class="form-control" placeholder="Mobile SMS token" name="sms_token" required>
+                    <input type="text" class="form-control" placeholder="Last name" name="last_name" value = "">
                     <div class="form-control-feedback">
-                        <i class="icon-phone text-muted"></i>
+                        <i class="icon-user text-muted"></i>
                     </div>
                 </div>
+
+                <div class="form-group has-feedback has-feedback-left">
+                    <input type="hidden" class="form-control" placeholder="Email address" name="email" value = {{$email}}>
+                </div>
+
+                {{--<div class="form-group has-feedback has-feedback-left">--}}
+                    {{--<input type="text" class="form-control" placeholder="Enter Email Token" name="email_token" required>--}}
+                    {{--<div class="form-control-feedback">--}}
+                        {{--<i class="icon-mailbox text-muted"></i>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+
+                {{--<div class="form-group has-feedback has-feedback-left">--}}
+                    {{--<input type="text" class="form-control" placeholder="Mobile SMS token" name="sms_token" required>--}}
+                    {{--<div class="form-control-feedback">--}}
+                        {{--<i class="icon-phone text-muted"></i>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
 
                 <div class="form-group has-feedback has-feedback-left">
                     <input type="password" class="form-control" placeholder="Set Password" name="password" required>

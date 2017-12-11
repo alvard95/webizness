@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Input;
 use Hash;
 use Cookie;
-
+use Mail;
 
 class UserController extends BaseController {
     public $hellodomain = "laravelcode.com";
@@ -130,7 +130,7 @@ class UserController extends BaseController {
 //        }
 
         $trax_id = $request->phone . time();
-        $sms_message = "Your postpaidbills.com sms code is <b></b>";
+        $sms_message = "Your ec2-35-177-218-234.eu-west-2.compute.amazonaws.com sms code is <b></b>";
         $sms_url = 'https://quickairtime.com/webservices/v2/index.php/noksms/pay?authtoken=672dea3c9238b3f7fbc01d54528dd64452635eb5&client_id=NDM5MDk=&tranx_id=' . $trax_id . '&gateway_type=3&payment_gateway_id=11&transaction_amount=0.01&transaction_currency=244&transaction_email=support@postpaidbills.com&sender_country_code=172&sender_id=PostpaidBill&subject=Postpaidbills%20Account%20verification&recipients[]='. $data['phone'] . '&sms_message=' . $sms_message  . '&merchant_email=support@postpaidbills.com&merchant_password=' . md5("2e66ULfX");
 
         $ch = curl_init();
@@ -148,8 +148,8 @@ class UserController extends BaseController {
         DB::table('verify')->insert(['email'=>$request->input('email'),'email_verify'=>$email_verify,'phone' => $request->phone]);
 
 
-        $email_message = "Your postpaidbills.com email code is <b></b><hr>";
-        $email_message .= "Verification URL : <a href='http://localhost/verify/".$email_verify."'>Verify</a>";
+        $email_message = "Your ec2-35-177-218-234.eu-west-2.compute.amazonaws.com email code is <b></b><hr>";
+        $email_message .= "Verification URL : <a href='".url('/verify')."/".$email_verify."'>Verify</a>";
         $email_url = 'https://quickairtime.com/webservices/api.php?cmd=100&from=Postpaid%20Bills&message=' . $email_message . '&subject=Postpaidbills%20Account%20verification&recipients[]='. $request->email . '&recipients[]=' . $request->email;
 
         curl_setopt($ch, CURLOPT_URL, $email_url);
@@ -180,16 +180,18 @@ class UserController extends BaseController {
                 ->first();
             if ($db_user) {
                 User::where('id', $db_user['id'])
-                    ->update(['phone' => $result->phone,
-                        'email_token' => $email_token,
-                        'sms_token' => $sms_token]);
+                    ->update([
+						'phone' => $result->phone,
+                        'email_token' => $email_token
+//                        'sms_token' => $sms_token
+					]);
             }
             else {
                 $res = User::create([
                     'email' => $result->email,
                     'phone' => $result->phone,
-                    'email_token' => $email_token,
-                    'sms_token' => $sms_token
+                    'email_token' => $email_token
+//                    'sms_token' => $sms_token
                 ]);
             }
             return view('register', array('email'=>$result->email));
@@ -198,6 +200,9 @@ class UserController extends BaseController {
             return view('login');
     }
 
+    public function signup(){
+		return view('signup');
+	}
     public function doRegister($id = false, Request $request) {
         $rules = array(
             'password' => 'required|min:6',
@@ -219,13 +224,26 @@ class UserController extends BaseController {
         $res = User::where('email', $data['email'])
 //            ->where('email_token', $request->get('email_token'))
 //            ->where('sms_token', $request->get('sms_token'))
-            ->update(['password' => bcrypt($data['password'])]);
+            ->update([
+				'password' => bcrypt($data['password']),
+				'first_name' => $request->get('first_name'),
+				'last_name' => $request->get('last_name')
+			]);
+		$user = User::where('email', $data['email'])->first();
+//		dd((array) $user);
+//		$user_arr = ['email' => $user->email];
+		// Mailgun test
+//		Mail::send('emails.mailEvent', $user_arr, function($message) use ($user) {
+//			$message->to($user->email);
+//			$message->subject('Mailgun Testing');
+//		});
+//		dd('Mail Send Successfully');
 
         if ($res) {
             Auth::attempt($data);
             return redirect('/');
         }
-        $res = "Oops! An error occurred while registereing";
+        $res = "Oops! An error occurred while registering";
         
         
         return \Redirect::back()->withInput()->with('error_messages', [$res]);            

@@ -270,7 +270,9 @@
     </div>
 
     <script type="text/javascript">
-
+        if(val > 0){
+            $('#setting_add_email div').hide();
+        }
         $('#setting_add_email').click(function(){
             if(val == 0){
                 $('#setting_second_email').append('<div class="row" style="display:flex;align-items:center">\n' +
