@@ -35,6 +35,13 @@ Route::group(array('middleware' => 'auth'), function(){
 
 
     Route::get('/', 'InboxController@index');
+
+
+    Route::get('/msg', 'UserController@checkMessage');
+    Route::get('/messages', 'ChatController@showMessages');
+
+
+
     Route::get('/delete/{id}', 'InboxController@delete');
 
     ///////////////

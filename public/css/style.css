@@ -1531,6 +1531,9 @@ body {
     color: #82C7CE!important;
 }
 
+.message_title h4, .message_title span{
+    display: inline-block;
+}
 
 #group_note::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color:    #48aa9d;

@@ -28,7 +28,7 @@
                 </li>
 
                 <li class="dropdown dropdown-setting">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
+                    <a href = "/messages">
                         <h5>messages</h5>
                     </a>
                 </li>
