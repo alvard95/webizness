@@ -5,9 +5,9 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Request;
-use LRedis;
 
+use LRedis;
+use Illuminate\Http\Request;
 use App\Models\Inbox;
 use App\Models\User;
 use App\Models\Messages;
@@ -40,10 +40,6 @@ class ChatController extends Controller {
 		}
 		$writers = [];
 
-
-//		$messages = Messages::where('receiver_id', $user->id)->orWhere('user_id',$user->id)->get();
-
-
 		$first = DB::table('messages')
 			->select('user_id')
 			->where('receiver_id','=',$user->id)
@@ -56,49 +52,61 @@ class ChatController extends Controller {
 			->where('user_id','=',$user->id)
 			->where('receiver_id','!=', $user->id)
 			->get();
-		dd($users);
 
+		foreach ($users as $value){
+			$user = User::find($value->receiver_id);
 
+			$user_message = DB::table( 'users' )
+				->select( 'users.*' , 'messages.id as msg_id' , 'messages.message' )
+		        ->join( 'messages', function ( $join ) {
+		            $join
+		            	->on( 'users.id', '=', 'messages.user_id' )
+		            	->orOn( 'users.id', '=', 'messages.receiver_id' );
+		        })
+		        ->where('users.id', $value->receiver_id)
+		        ->orderBy('messages.id', 'desc')
+		        ->first(); 
 
-//		$friends = DB::table('users')
-//			->leftJoin('messages', function($join) {
-//				$auth_id = Auth::user()->id;
-//				$join->on('users.id', '=', 'messages.user_id')
-//					->where('receiver_id', '=', $auth_id)
-//					->orOn('users.id', '=', 'messages.receiver_id')
-//					->Where('user_id', '=', $auth_id);
-//			})
-//			->toSQl();
-
-//		dd($friends);
-
-//		echo "<pre>";
-		foreach ($messages as $value){
-			if($value->user_id !== $user->id && $value->receiver_id == $user->id){
-				$user = User::find($value->user_id);
-//					var_dump(888888,$user);
-				array_push($writers,$user);
-			}
-			else if($value->receiver_id !== $user->id && $value->user_id == $user->id){
-				$user = User::find($value->receiver_id);
-//					var_dump(77777,$user);
-				array_push($writers,$user);
-			}
-//				dd($value);
+			array_push($writers,$user_message);
 		}
-//	die;
-		dd(array_unique($writers));
-//		dd($messages);
+
 		$data = [
 			'user_list'=>$user_list,
 			'check_count'=>$check_count,
 			'favorite_count'=>$favorite_count,
 			'upload_count'=>$upload_count,
 			'inbox'=>$inbox,
-			'messages'=>$messages,
+			'messages'=>$writers,
 			'group_info'=>$group_info
 		];
 		return view('messages', $data);
+	}
+
+
+
+	public function showMsg(Request $request){
+		$to_user = $request['to_user'];
+
+        $twoMessages = Messages::select('*')
+            ->leftJoin('users', function ($join) use($to_user) {
+                $join->on('messages.user_id', '=', 'users.id');
+            })
+            ->leftJoin('uploads', function ($join) use($to_user) {
+                $join->on('messages.music_id', '=', 'uploads.id');
+            })
+            ->where('messages.receiver_id','=',$to_user)
+            ->where('messages.user_id','=',Auth::id())
+            ->orWhere('messages.receiver_id','=',Auth::id())
+            ->where('messages.user_id', '=', $to_user)
+            ->get();
+
+        $recerver_user = User::find($to_user);
+
+		return response()->json([
+			'auth_id' => Auth::id(),
+			'recerver_user' => $recerver_user,
+		    'twoMessages' => $twoMessages
+		]);
 	}
 
     public function sendMessage(){

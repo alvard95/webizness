@@ -99,6 +99,71 @@ $(document).ready(function() {
     $("#imgInp").change(function() {
         readURL(this);
     });
+
+
+    // chat script
+
+    $( ".show_msg" ).on( "click", function() {
+        to_user = $(this).attr("id");
+        var _token = $("#_token").val();
+        $.ajax({
+            url: "show_msg",
+            type: "post",
+            data: {
+                    "_token": _token,
+                    "to_user": to_user
+                } ,
+            success: function (result) {
+                $('.friend_msg').html('');
+                $('.recerver_user_img').html('');
+                $('.recerver_user_name').html('');
+                $('.recerver_user').removeClass('display_recerver_user');
+                console.log(result);
+                var messages = result.twoMessages;
+                var recerver_user = result.recerver_user;
+                for(var i=0;i<messages.length;i++){
+                    console.log(messages[i])
+                    if(messages[i].user_id == result.auth_id){
+                       $('.friend_msg').append('<div class="col-md-10"  style="float:right">'+
+                            '<div class="alert col-md-12"  >'+
+                                '<div class="col-md-2 user_img" style="float:right"  >'+
+                                    '<img width="40" height="40" src="assets/images/profile/'+messages[i].avatar+'">'
+                                +'</div><div class="col-md-8" style="float:right;padding-top:  10px;"  ><span style="float:right">'+
+                                    messages[i].message
+                                +'</span></div>'
+                            +'</div>'
+                        +'</div>')
+                    }else{
+                       $('.friend_msg').append('<div class="col-md-10"  style="float:left">'+
+                            '<div class="alert col-md-12 ">'+
+                                '<div class="col-md-2 user_img" style="float:left; "  >'+
+                                    '<img width="40" height="40" src="assets/images/profile/'+messages[i].avatar+'">'
+                                +'</div><div class="col-md-8 to_message" style="padding-top:  10px;padding-bottom: 10px;"  ><span style="float:left">'+
+                                    messages[i].message
+                                +'</span></div>'
+                            +'</div>'
+                        +'</div>')
+                    }
+                }
+                if(recerver_user){
+                    $('.recerver_user_img').append('<img width="55" height="55" src="assets/images/profile/'+recerver_user.avatar+'">');
+                    $('.recerver_user_name').append('<span style="float:left">'+ recerver_user.first_name + ' ' + recerver_user.last_name +'</span>');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+               console.log(textStatus, errorThrown);
+            }
+
+
+        });
+
+    });
+
+
+
+
+
+
 });
 // /// File Input
 

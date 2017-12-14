@@ -1556,3 +1556,56 @@ body {
 #group_note::placeholder { /* Most modern browsers support this now. */
     color:    #48aa9d;
 }
+
+/*message*/
+
+.message_title span {
+    font-size: 38px;
+    color: rgb(133,133,133);
+}
+.search_wrapper input{
+    border-radius: 10px;
+    background-color: rgb(199 , 199 , 199);
+}
+.user_img img{
+    border-radius: 50%;
+}
+.threat_item:hover{
+    background-color: rgb(222,222,222);
+    border-radius: 20px;
+}
+.msg_content{
+    font-size: 18px;
+}
+.last_msg{
+    color: rgb(144,144,144);
+}
+.friend_msg{
+    border:3px solid rgb(150,150,150);
+    width: 100%;
+    overflow-x: scroll;
+    height:700px;
+}
+.to_message{
+    background-color: #6ad46a;
+    border-radius: 10px;
+    float:left;
+    min-height:40px
+}
+.recerver_user{
+    padding-top: 20px;
+}
+.recerver_user_img img{
+    border-radius: 50%;
+}
+.recerver_user_name span{
+    font-weight: 700;
+    font-size: 20px;
+}
+.display_recerver_user{
+    display: none;
+}
+.icons strong{
+    color: rgb(111,111,111);
+    font-size: 18px;
+}

@@ -32,6 +32,7 @@ Route::post('/doregister', 'UserController@doRegister');
 
 Route::group(array('middleware' => 'auth'), function(){
     Route::post('sendmessage', 'ChatController@sendMessage');
+    Route::post('show_msg', 'ChatController@showMsg');
 
 
     Route::get('/', 'InboxController@index');
